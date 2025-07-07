@@ -6,12 +6,8 @@ export default function RoomDashboard() {
   const { id } = useParams();
   const [room, setRoom] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [newItem, setNewItem] = useState({
-    name: '',
-    price: '',
-    imageUrl: '',
-    link: ''
-  });
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
   
   const currentUserId = JSON.parse(atob(localStorage.getItem('token').split('.')[1])).userId;
 
@@ -44,25 +40,44 @@ export default function RoomDashboard() {
     }
   };
 
-  const handleAddItem = async (e) => {
-    e.preventDefault();
+  const handleSearch = async () => {
+    if (!searchTerm) return setSearchResults([]);
+  
     try {
-      const payload = {
-        ...newItem,
-        price: parseFloat(newItem.price),
-        roomId: parseInt(id)
-      };
-      const res = await axios.post('/items', payload);
-      setRoom(prev => ({
-        ...prev,
-        items: [res.data, ...prev.items]
+      const res = await axios.get(`/ebay/search?q=${searchTerm}`);
+      const formatted = res.data.map(item => ({
+        id: item.itemId,
+        title: item.title,
+        price: item.price?.value || 0,
+        image: item.image?.imageUrl || '',
+        url: item.itemWebUrl
       }));
-      setNewItem({ name: '', price: '', imageUrl: '', link: '' });
+      setSearchResults(formatted);
     } catch (err) {
-      alert('Failed to add item: ' + (err.response?.data?.message || 'Error'));
+      console.error('eBay search failed:', err);
+      alert('Failed to fetch items from eBay');
     }
   };
   
+  
+  const handleAddItem = async (item) => {
+    try {
+      const payload = {
+        name: item.title,
+        price: item.price,
+        imageUrl: item.image,
+        link: item.url,
+        roomId: parseInt(id)
+      };
+      await axios.post('/items',payload);
+
+      const res = await axios.get(`/rooms/${id}`);
+      setRoom(res.data);
+    } catch (err) {
+      console.error(err);
+      alert('Failed to add item');
+    }
+  };
 
   const deleteItem = async (itemId) => {
     try {
@@ -99,46 +114,43 @@ export default function RoomDashboard() {
       </div>
 
       <div className="bg-white shadow p-6 rounded-md">
-        <h2 className="text-lg font-semibold mb-4">Add Item</h2>
-        <form onSubmit={handleAddItem} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input
-            type="text"
-            placeholder="Item name"
-            value={newItem.name}
-            onChange={e => setNewItem({ ...newItem, name: e.target.value })}
-            required
-            className="p-2 border rounded"
-          />
-          <input
-            type="number"
-            placeholder="Price"
-            value={newItem.price}
-            onChange={e => setNewItem({ ...newItem, price: e.target.value })}
-            required
-            className="p-2 border rounded"
-          />
-          <input
-            type="text"
-            placeholder="Image URL (optional)"
-            value={newItem.imageUrl}
-            onChange={e => setNewItem({ ...newItem, imageUrl: e.target.value })}
-            className="p-2 border rounded"
-          />
-          <input
-            type="text"
-            placeholder="Link (optional)"
-            value={newItem.link}
-            onChange={e => setNewItem({ ...newItem, link: e.target.value })}
-            className="p-2 border rounded"
-          />
-          <button
-            type="submit"
-            className="col-span-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-          >
-            Add Item
-          </button>
-        </form>
+      <h2 className="text-lg font-semibold mb-4">Search and Add Items</h2>
+
+      <div className="flex gap-2 mb-4">
+        <input
+          type="text"
+          placeholder="Search for products..."
+          className="flex-1 p-2 border rounded"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <button
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          onClick={handleSearch}
+        >
+          Search
+        </button>
       </div>
+
+      {searchResults.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {searchResults.map(item => (
+            <div key={item.id} className="border p-4 rounded shadow-sm bg-gray-50">
+              <img src={item.image} alt={item.title} className="w-24 h-24 object-contain mx-auto" />
+              <h3 className="text-sm font-medium mt-2">{item.title}</h3>
+              <p className="text-sm text-gray-700 mb-2">${item.price}</p>
+              <button
+                className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
+                onClick={() => handleAddItem(item)}
+              >
+                Add to Room
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+
 
       <div>
         <h2 className="text-xl font-semibold mb-2">Items</h2>
@@ -149,6 +161,7 @@ export default function RoomDashboard() {
             <table className="min-w-full border text-sm">
               <thead className="bg-gray-100 text-left">
                 <tr>
+                  <th className='px-4 py-2'>Image</th>
                   <th className="px-4 py-2">Name</th>
                   <th className="px-4 py-2">Price</th>
                   <th className="px-4 py-2">Status</th>
@@ -160,8 +173,15 @@ export default function RoomDashboard() {
               <tbody>
                 {room.items.map(item => (
                   <tr key={item.id} className="border-t">
+                    <td className="px-4 py-2">
+                      {item.imageUrl ? (
+                        <img src={item.imageUrl} alt={item.name} className="w-12 h-12 object-contain" />
+                      ) : (
+                        <span className="text-gray-400 italic">No image</span>
+                      )}
+                    </td>
                     <td className="px-4 py-2">{item.name}</td>
-                    <td className="px-4 py-2">₹{item.price}</td>
+                    <td className="px-4 py-2">${item.price}</td>
                     <td className="px-4 py-2">{item.status}</td>
                     <td className="px-4 py-2">{item.addedBy.name}</td>
                     {isCreator && (
