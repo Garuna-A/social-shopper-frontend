@@ -53,65 +53,65 @@ export default function Rooms() {
   
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-purple-100 p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-blue-700">Your Rooms</h1>
+        <h1 className="text-3xl font-extrabold text-blue-700">Your Rooms</h1>
         <button
           onClick={handleLogout}
-          className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+          className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 shadow"
         >
           Logout
         </button>
       </div>
-
+  
       {/* Create Room */}
-      <div className="bg-white p-4 rounded shadow mb-6">
-        <h2 className="text-lg font-semibold mb-2">Create Room</h2>
-        <form onSubmit={handleCreateRoom} className="flex flex-col gap-2 sm:flex-row sm:items-center">
+      <div className="bg-white/80 backdrop-blur-md p-6 rounded-xl shadow-lg mb-6 border border-gray-200">
+        <h2 className="text-xl font-semibold mb-2">Create a New Room</h2>
+        <form onSubmit={handleCreateRoom} className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <input
             type="text"
             placeholder="Room name"
             value={newRoomName}
             onChange={(e) => setNewRoomName(e.target.value)}
             required
-            className="flex-1 p-2 border rounded focus:ring-2 focus:ring-blue-400"
+            className="flex-1 p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400"
           />
-          <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+          <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow">
             Create
           </button>
         </form>
       </div>
-
+  
       {/* Join Room */}
-      <div className="bg-white p-4 rounded shadow mb-6">
-        <h2 className="text-lg font-semibold mb-2">Join Room</h2>
-        <form onSubmit={handleJoinRoom} className="flex flex-col gap-2 sm:flex-row sm:items-center">
+      <div className="bg-white/80 backdrop-blur-md p-6 rounded-xl shadow-lg mb-6 border border-gray-200">
+        <h2 className="text-xl font-semibold mb-2">Join a Room</h2>
+        <form onSubmit={handleJoinRoom} className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <input
             type="text"
             placeholder="Room code"
             value={joinCode}
             onChange={(e) => setJoinCode(e.target.value)}
             required
-            className="flex-1 p-2 border rounded focus:ring-2 focus:ring-blue-400"
+            className="flex-1 p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-400"
           />
-          <button className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+          <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 shadow">
             Join
           </button>
         </form>
       </div>
-
+  
       {/* Rooms List */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {rooms.length === 0 ? (
-          <p className="text-gray-600">No rooms yet.</p>
+          <p className="text-gray-600 text-lg">No rooms yet. Create or join one!</p>
         ) : (
           rooms.map((room) => (
-            <div key={room.id} className="bg-white p-4 rounded shadow border">
-              <h3 className="font-semibold text-lg">{room.name}</h3>
-              <p className="text-sm text-gray-500 mb-2">Code: {room.code}</p>
+            <div key={room.id} className="bg-white/90 rounded-xl border border-gray-200 p-5 shadow-md hover:shadow-xl transition">
+              <h3 className="font-bold text-lg text-blue-800">{room.name}</h3>
+              <p className="text-sm text-gray-500 mb-3">Code: <span className="font-mono">{room.code}</span></p>
               <button
                 onClick={() => navigate(`/rooms/${room.id}`)}
-                className="px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
+                className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 shadow-sm"
               >
                 Open Room
               </button>
@@ -120,5 +120,5 @@ export default function Rooms() {
         )}
       </div>
     </div>
-  );
+  );  
 }

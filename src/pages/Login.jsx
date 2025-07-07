@@ -14,18 +14,20 @@ export default function Login() {
       localStorage.setItem('token', res.data.token);
       navigate('/rooms');
     } catch (err) {
-        console.error(err)
+      console.error(err);
       alert('Login failed');
     }
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100">
       <form
         onSubmit={handleLogin}
-        className="bg-white shadow-md rounded-lg p-8 w-full max-w-sm space-y-4"
+        className="bg-white/70 backdrop-blur-md shadow-2xl border border-white/30 rounded-2xl p-10 w-full max-w-md space-y-6 animate-fade-in"
       >
-        <h2 className="text-2xl font-bold text-center text-blue-600">Login</h2>
+        <h2 className="text-3xl font-extrabold text-center text-blue-700 drop-shadow-sm">
+          Welcome Back
+        </h2>
 
         <input
           type="email"
@@ -33,7 +35,7 @@ export default function Login() {
           value={email}
           onChange={e => setEmail(e.target.value)}
           required
-          className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full p-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
 
         <input
@@ -42,19 +44,21 @@ export default function Login() {
           value={password}
           onChange={e => setPassword(e.target.value)}
           required
-          className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full p-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+          className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white p-3 rounded-xl font-semibold hover:scale-105 transform transition"
         >
           Login
         </button>
 
-        <p className="text-center text-sm">
+        <p className="text-center text-sm text-gray-700">
           Don't have an account?{' '}
-          <a href="/register" className="text-blue-500 hover:underline">Register</a>
+          <a href="/register" className="text-indigo-600 hover:underline font-medium">
+            Register
+          </a>
         </p>
       </form>
     </div>
