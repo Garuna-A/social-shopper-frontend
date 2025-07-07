@@ -23,7 +23,7 @@ export default function Register() {
     try {
       const res = await axios.post('/auth/register', form);
       localStorage.setItem('token', res.data.token);
-      navigate('/rooms');
+      navigate('/login');
     } catch (err) {
       console.error(err);
       alert('Registration failed: ' + (err.response?.data?.message || 'Unexpected error'));
