@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from '../api/axiosInstance';
 import { useNavigate } from 'react-router-dom';
+import Navbar from '../components/Navbar';
 
 export default function Register() {
   const [form, setForm] = useState({ name: '', email: '', password: '' });
@@ -31,12 +32,14 @@ export default function Register() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100">
+      <Navbar/>
+      <div className="flex flex-1 items-center justify-center px-4">
       {loading ? (
         <div className="bg-white/70 backdrop-blur-md p-10 rounded-2xl shadow-2xl flex flex-col items-center space-y-4 animate-fade-in">
           <div className="flex justify-center items-center">
             <div className="w-6 h-6 border-4 border-white border-t-orange-500 rounded-full animate-spin"></div>
-            <span className="ml-3 text-orange-600 font-semibold text-lg">Creating your account...</span>
+            <span className="ml-3 text-blue-600 font-semibold text-lg">Creating your account...</span>
           </div>
         </div>
       ) : (
@@ -89,6 +92,7 @@ export default function Register() {
           </p>
         </form>
       )}
+      </div>
     </div>
   );  
 }
