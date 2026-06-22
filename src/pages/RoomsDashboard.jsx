@@ -8,6 +8,8 @@ export default function RoomDashboard() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [aiPrompt, setAiPrompt] = useState('');
+  const [assistantMessage, setAssistantMessage] = useState('');
   const [showCheckout, setShowCheckout] = useState(false);
   
   // Adjusted to safely parse token and access userId
@@ -64,6 +66,23 @@ export default function RoomDashboard() {
       alert('Failed to fetch items from eBay');
     }
   };
+
+  const handleAISearch = async()=>{
+    if(!aiPrompt.trim())return;
+    try{
+      const res = await axios.post("ai/search",{
+        prompt:aiPrompt
+      });
+      setSearchResults(res.data.products);
+      setAssistantMessage(
+        `Showing results for "${res.data.generatedQuery.keywords}"`
+      );
+    }
+    catch(err){
+      console.error(err);
+      alert("AI Search Failed");
+    }
+  }
   
   
   const handleAddItem = async (item) => {
@@ -208,7 +227,46 @@ export default function RoomDashboard() {
             Search
           </button>
         </div>
+        <div className="mt-8 border-t pt-6">
 
+          <h2 className="text-lg font-semibold mb-2">
+            ✨ AI Shopping Assistant
+          </h2>
+
+          <p className="text-gray-500 text-sm mb-3">
+            Describe what you're looking for in plain English.
+          </p>
+
+          <div className="flex gap-2">
+
+            <input
+              type="text"
+              value={aiPrompt}
+              onChange={(e) => setAiPrompt(e.target.value)}
+              placeholder="Example: Need a birthday gift for my dad under $50"
+              className="flex-1 border rounded p-2"
+            />
+
+            <button
+              onClick={handleAISearch}
+              className="bg-purple-600 text-white px-4 rounded hover:bg-purple-700"
+            >
+              Ask AI
+            </button>
+
+          </div>
+
+        </div>
+        {assistantMessage && (
+            <div className="mt-6 mb-4 p-3 bg-purple-50 border border-purple-200 rounded">
+              <p className="text-purple-700">
+
+                {assistantMessage}
+
+              </p>
+
+            </div>
+        )}
         {searchResults.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {searchResults.map(item => (
