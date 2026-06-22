@@ -9,6 +9,7 @@ export default function RoomDashboard() {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [aiPrompt, setAiPrompt] = useState('');
+  const [aiSections, setAiSections] = useState([]);
   const [assistantMessage, setAssistantMessage] = useState('');
   const [showCheckout, setShowCheckout] = useState(false);
   
@@ -74,18 +75,10 @@ export default function RoomDashboard() {
         prompt:aiPrompt
       });
 
-      const formatted = res.data.products.map(item => ({
-        id: item.itemId,
-        title: item.title,
-        price: item.price?.value || 0,
-        image: item.image?.imageUrl || "",
-        url: item.itemWebUrl
-      }));
-    
-      setSearchResults(formatted);
       setAssistantMessage(
-        `Showing results for "${res.data.generatedQuery.keywords}"`
+        `Showing results for "${res.data.title}"`
       );
+      setAiSections(res.data.sections);
     }
     catch(err){
       console.error(err);
@@ -309,7 +302,74 @@ export default function RoomDashboard() {
             ))}
           </div>
         )}
+
+        {aiSections.length > 0 && (
+          <div className="space-y-10 mt-8">
+
+            {aiSections.map(section => (
+
+              <div key={section.category}>
+
+                <h2 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">
+                  {section.category}
+                </h2>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                  {section.products.map(item => (
+
+                    <div
+                      key={item.id}
+                      className="border border-gray-200 p-5 rounded-lg shadow-md bg-gray-50 flex flex-col items-center text-center hover:scale-105 transition"
+                    >
+
+                      {item.image ? (
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          className="w-32 h-32 object-contain mb-4"
+                        />
+                      ) : (
+                        <div className="w-32 h-32 flex items-center justify-center bg-gray-200 rounded">
+                          No Image
+                        </div>
+                      )}
+
+                      <a
+                        href={item.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-700 font-semibold hover:underline mb-2 line-clamp-2"
+                      >
+                        {item.title}
+                      </a>
+
+                      <p className="text-xl font-bold mb-3">
+                        ${item.price.toFixed(2)}
+                      </p>
+
+                      <button
+                        className="mt-auto px-5 py-2 bg-green-600 text-white rounded-full hover:bg-green-700"
+                        onClick={() => handleAddItem(item)}
+                      >
+                        Add to Room
+                      </button>
+
+                    </div>
+
+                  ))}
+
+                </div>
+
+              </div>
+
+            ))}
+
+          </div>
+
+        )}
       </div>
+
 
       {/* Items List Section */}
       <div className="bg-white shadow-md p-6 rounded-lg border border-gray-200">
