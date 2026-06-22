@@ -1,22 +1,17 @@
-
-# 🛒 SocialShopper – Walmart Sparkathon Submission
+# 🛒 SocialShopper – AI Powered Collaborative Shopping Room Web App 
 > Bringing people closer, one cart at a time.
 
-This is the official submission for the **Walmart Sparkathon**, consisting of a collaborative shopping application where users can create or join "rooms" to discuss, suggest, vote, and approve products to buy collectively.
+SocialShopper is a full-stack collaborative shopping web application that enables multiple users to create shared shopping rooms, discover products in real time, discuss purchases, vote on suggestions, and build shopping lists together.
+
+The platform integrates the **eBay Browse API** for live product discovery and **Groq Llama 3.3** to power an AI Shopping Planner that converts natural language requests into structured, multi-category shopping recommendations. The application features JWT-based authentication, role-based moderation, collaborative decision-making, and a scalable RESTful backend built with Express, Prisma ORM, and PostgreSQL.
+
 
 ### Live Demo: [Social Shopper Live ](https://social-shopper.vercel.app/)
-#### _⏳ Heads up! It might take a few seconds to load the first time as the backend server wakes up._
+> The first request may take a few seconds as the backend is hosted on Render's free tier.
 ---
-## 🎯 Motive behind the project
-
-In an era where digital convenience has often led to social isolation, we built SocialShopper to bring people back together through collaborative shopping. 
-
-Our submission for Walmart Sparkathon, SocialShopper enables groups to create shared shopping rooms, suggest items, vote, and finalize purchases collectively. By blending practicality with a social layer, we aim to make shopping more interactive, democratic, and fun.
-
-
 ## 📁 Repository Structure
 
-This submission is split into **two repositories**:
+This project is split into **two repositories**:
 
 - [`social-shopper-frontend`](https://github.com/Garuna-A/social-shopper-frontend)
 - [`social-shopper-backend`](https://github.com/Garuna-A/social-shopper-backend)
@@ -33,6 +28,15 @@ This submission is split into **two repositories**:
 ### Smart Product Search
  - Integrated with eBay API for live product search.
  - Search results include name, price, image, and direct eBay links.
+### AI Shopping Planner
+ - Instead of relying on keyword-based search, users can describe their shopping needs using natural language.
+ - Example :
+   
+   > "Winter essentials for a trip to Norway"
+    - The AI understands user intent
+    - Breaks the request into multiple shopping categories
+    - Performs optimized eBay searches for each category
+    - Returns structured shopping recommendations
 ### Item Management
  - Users can propose items to be added to the shared cart.
  - Only room creators can approve/reject items to maintain cart quality.
@@ -48,22 +52,15 @@ This submission is split into **two repositories**:
 - **Frontend**: React (Vite), Tailwind CSS, Axios
 - **Backend**: Node.js, Express.js, Prisma ORM, PostgreSQL
 - **Authentication**: JWT (JSON Web Tokens)
-- **Product Search**: eBay Buy Browse API
+- **AI & external APIs**: Groq Llama 3.3 70B, eBay Buy Browse API
 - **Deployment**: Vercel (frontend), Render (backend), NeonDB (PostgreSQL)
 
 ---
 ## 📸 Screenshots
 
-![Screenshot_12-7-2025_1436_social-shopper vercel app](https://github.com/user-attachments/assets/3bdbaaf7-145e-4af4-94e2-550fc8c4ba07)
-
 ![Screenshot_12-7-2025_14247_social-shopper vercel app](https://github.com/user-attachments/assets/4223bd9e-acc9-437f-a923-439562719aab)
 
----
-## 📽️ Demo Video
-
-https://github.com/user-attachments/assets/65aeb8a1-fccd-4c9c-b591-4d184b4cfe55
-
-▶️ [Watch on Youtube](https://youtu.be/jop8YXJSnrk)
+<img width="1731" height="5305" alt="image" src="https://github.com/user-attachments/assets/e7ed9d24-6e6f-4815-a596-57dfaa55a449" />
 
 ---
 
@@ -107,19 +104,6 @@ App runs at `http://localhost:5173`.
 # 📦 social-shopper-backend
 
 Please refer to [social-shopper-backend](https://github.com/Garuna-A/social-shopper-backend) for backend Installation
-
----
-
-
-# Contributors
-
- - [Anurag Mishra](https://github.com/Garuna-A/)
-
- - [Sidharth Sharma](https://github.com/Sidd0770)
-
- - [Kartik Dixit](https://github.com/SMOKESCRE3N)
-
- - [Gitank Rana](https://github.com/GitankRana)
 
 ---
 ## Built with 💙 for a Social World
