@@ -73,7 +73,16 @@ export default function RoomDashboard() {
       const res = await axios.post("ai/search",{
         prompt:aiPrompt
       });
-      setSearchResults(res.data.products);
+
+      const formatted = res.data.products.map(item => ({
+        id: item.itemId,
+        title: item.title,
+        price: item.price?.value || 0,
+        image: item.image?.imageUrl || "",
+        url: item.itemWebUrl
+      }));
+    
+      setSearchResults(formatted);
       setAssistantMessage(
         `Showing results for "${res.data.generatedQuery.keywords}"`
       );
